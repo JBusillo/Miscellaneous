@@ -1,0 +1,36 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Program",
+            "program": "${env:HOME}/Projects/kit/packages/kit/src/cli.js",
+            "args": [
+                "dev"
+            ],
+            "cwd": "${env:HOME}/Projects/testing-kit",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/**/*.js",
+                //              "${workspaceFolder}/packages/kit/node_modules/vite/dist/node/**/*.js",
+                "${env:HOME}/Projects/vite/packages/vite/dist/node/**/*.js",
+                // "${workspaceFolder}/packages/kit/node_modules/vite/dist/node/*.js",
+                // "${workspaceFolder}/packages/kit/node_modules/vite/dist/node/optimizer/*.js",
+                // "${workspaceFolder}/packages/kit/node_modules/vite/dist/node/plugins/*.js",
+                // "${workspaceFolder}/packages/kit/node_modules/vite/dist/node/server/*.js",
+                // "${workspaceFolder}/packages/kit/node_modules/vite/dist/node/ssr/*.js",
+            ],
+            "resolveSourceMapLocations": [
+                "${workspaceFolder}/**/*.js",
+                //                "${workspaceFolder}/packages/kit/node_modules/vite/dist/node/**/*.js",
+                "${env:HOME}/Projects/vite/packages/vite/dist/node/**/*.js",
+            ],
+            "type": "pwa-node"
+        },
+    ]
+}
