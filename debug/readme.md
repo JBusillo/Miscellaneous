@@ -1,4 +1,4 @@
-#These files are for debugging SvelteKit and Vite together.
+# These files are for debugging SvelteKit and Vite together.
 
 ### newkit.sh
 
