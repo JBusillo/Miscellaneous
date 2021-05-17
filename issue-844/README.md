@@ -43,6 +43,6 @@ This is just a suggestion.  I don't have experience with Github (pull, push, bra
 
 And, being new to open source, I'm unfamiliar with the procedures, politics, etc.  This is why I've put this README.md outside of the issue's comments.  I welcome suggestions on whether this is the proper method to suggest changes, or if the 'powers-that-be' prefer coming up with their own solutions and writing their own code.  So, my apologies if I have offended anyone or if you consider this to be intrusive.
 
-Feel free to contact me via email (jbusillo@yahoo.com) with comments.
+Feel free to contact me via email (jbusillo@yahoo.com) with the appropriate tongue-lashings, if necessary.
 
 Thank you.
