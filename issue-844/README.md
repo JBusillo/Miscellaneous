@@ -1,10 +1,15 @@
 # Proposed solution for Issue 844
 
+    Issue:      [https://github.com/sveltejs/kit/issues/844](https://github.com/sveltejs/kit/issues/844)
+    My Comment: [https://github.com/sveltejs/kit/issues/844#issuecomment-841610497](https://github.com/sveltejs/kit/issues/844#issuecomment-841610497)ss
+
+    Issue:      https://github.com/sveltejs/kit/issues/844
+    My Comment: https://github.com/sveltejs/kit/issues/844#issuecomment-841610497
+
+
 
 In this issue's comments, I had proposed changes which included re-ordering code in the core/dev:
 
-    Issue:      [https://github.com/sveltejs/kit/issues/844](https://github.com/sveltejs/kit/issues/844)
-    My Comment: [https://github.com/sveltejs/kit/issues/844#issuecomment-841610497](https://github.com/sveltejs/kit/issues/844#issuecomment-841610497)
 
 Although my tests worked, I was a bit uncomfortable drastically changing the "mainline" dev code by reordering it.
 
