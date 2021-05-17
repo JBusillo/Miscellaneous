@@ -23,7 +23,7 @@ Add a new exported function `set-handler(handler)`.  Once this is called, the ca
 
  Remove the handler parameter from the `get server` function call.  The server will use the dummy handler at this time, should any http(s) requests be made.
 
- Change the configuration setup to check if https should be used.  If it is, set the HMR port to the dev server's port, and the server to the dev server.  (This is needed, because a secure websocket (wss) with a self-signed certificate will always fail unless it is validated through https on a displayable page.  By 'piggy-backing') onto the application server, when the user approves using the unsigned certificate, future https and wss requests will be authorized)
+ Change the configuration setup to check if https should be used.  If it is, set the HMR port to the dev server's port, and the server to the dev server.  (This is needed, because a secure websocket (wss) with a self-signed certificate will always fail unless it is validated through https on a displayable page.  By 'piggy-backing' onto the application server, when the user approves using the unsigned certificate, future https and wss requests will be authorized)
 
  Afterwards, call the new function `set handler` to replace the dummy handler with the `vite.middlewares` handler.
 
