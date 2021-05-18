@@ -4,38 +4,44 @@ Issue:      [https://github.com/sveltejs/kit/issues/844](https://github.com/svel
 
 My original comment: [https://github.com/sveltejs/kit/issues/844#issuecomment-841610497](https://github.com/sveltejs/kit/issues/844#issuecomment-841610497)
 
-In my original comment, I had proposed changes which included re-ordering code in the core/dev:
+## Improved Proposal
 
-Although my tests worked, I was a bit uncomfortable drastically changing the "mainline" dev code by reordering it.
+Only one module needs to be changed: `kit/src/core/dev/index.js`.  [Modified Source Code](./kit-packages-kit-src-core-dev-index.js)
 
-Instead, I propose the following changes:
+The method of attack is:
 
-## kit/src/core/server/index.js
-Remove the handler from the `get_server` function.
-    
-Instead, use a dummy handler that returns a status code 204 (No Content).  This would be needed if there are requests before Vite is ready to process them.
+- Move the get_server function before calling `vite.createServer`.  At this point, any http(s) requests will result in a 204 (No Content), due to the initial state of the viteHandler.  By moving this code up, the inlineConfig object has access to `this.server`.
+```javascript
+	/** @type {?(req: any, res: any) => void} */
+	let viteHandler = (res, req) => {
+		res.statusCode = 204;
+		res.end();
+	};
 
-Add a new exported function `set-handler(handler)`.  Once this is called, the calling function's handler is used instead of the dummy handler.
+	this.server = await get_server(this.port, this.host, this.https, (req, res) => {
+		viteHandler(req, res);
+	});
 
-## kit/src/core/dev/index.js
+```
+-  Change the configuration setup to check if https should be used.  If it is, set the HMR port to the dev server's port, and the server to the dev server.  This is needed because a secure websocket (wss) with a self-signed certificate will always fail unless it is validated through https on a displayable page.  By 'piggy-backing' onto the application server, when the user approves using the unsigned certificate, future https and wss requests will be authorized.
 
- Move the call to `get_server` function before calling `vite.createServer`.  This ensures that the server reference is available within the `vite.createServer` configuration.
-
- Remove the handler parameter from the `get server` function call.  The server will use the dummy handler at this time, should any http(s) requests be made.
-
- Change the configuration setup to check if https should be used.  If it is, set the HMR port to the dev server's port, and the server to the dev server.  (This is needed, because a secure websocket (wss) with a self-signed certificate will always fail unless it is validated through https on a displayable page.  By 'piggy-backing' onto the application server, when the user approves using the unsigned certificate, future https and wss requests will be authorized)
-
- Afterwards, call the new function `set handler` to replace the dummy handler with the `vite.middlewares` handler.
-
-## kit/src/core/start/index.js
-
-The 'start' (preview) process also needs to be changed due to the modifications in kit/src/core/server/index.js.  The `return` statement (which returns the created server) needs to be broken out into three steps:
-
-Call `get_server`, eliminating the handler parameter.
-
-Call 'set_handler` to replace the dummy handler with the desired handler.
-
-Return the `server` reference to the calling process.
+```javascript
+    server: {
+		...user_config.server,
+		middlewareMode: true,
+		hmr: {
+			...user_config.server?.hmr,
+			...(this.https ? {server: this.server, port: this.port} : {})
+			}
+		},
+```
+- Update the viteHandler with the middlewares handler.  
+```javascript
+    viteHandler = (req, res) =>
+	    this.vite.middlewares(req, res, async () => {
+        ...
+        }
+```        
 
 ## My questions
 

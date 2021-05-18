@@ -13,7 +13,7 @@ import { respond } from '../../runtime/server/index.js';
 import { getRawBody } from '../node/index.js';
 import { copy_assets, get_no_external, resolve_entry } from '../utils.js';
 import svelte from '@sveltejs/vite-plugin-svelte';
-import { get_server, set_handler } from '../server/index.js';
+import { get_server } from '../server/index.js';
 import '../../install-fetch.js';
 import { SVELTE_KIT } from '../constants.js';
 
@@ -76,11 +76,18 @@ class Watcher extends EventEmitter {
 	}
 
 	async init_server() {
-
-		this.server = await get_server(this.port, this.host, this.https);
-
 		/** @type {any} */
 		const user_config = (this.config.kit.vite && this.config.kit.vite()) || {};
+
+		/** @type {?(req: any, res: any) => void} */
+		let viteHandler = (res, req) => {
+			res.statusCode = 204;
+			res.end();
+		};
+
+		this.server = await get_server(this.port, this.host, this.https, (req, res) => {
+					viteHandler(req, res);
+		});
 
 		/**
 		 * @type {vite.ViteDevServer}
@@ -138,7 +145,7 @@ class Watcher extends EventEmitter {
 			}
 		};
 
-		set_handler((req, res) => {
+		viteHandler = (req, res) =>
 			this.vite.middlewares(req, res, async () => {
 				try {
 					const parsed = parse(req.url);
@@ -317,7 +324,6 @@ class Watcher extends EventEmitter {
 					res.end(e.stack);
 				}
 			});
-		});
 	}
 
 	update() {
